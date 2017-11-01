@@ -124,10 +124,10 @@ namespace routing {
 
     export function setup(app: express.Express, options: SetupOptions = {}): MvcApp {
         let controllerDir : string = options.controllerDir || path.join(process.cwd(), 'controllers');
-        let files : string[] = fs.readdirSync(controllerDir);
+        let files : string[] =  getControllersFiles(controllerDir);
 
         console.log('files ', files);
-        
+
         let dependencyManager = options.dependencyManager || dm;
         let mvcApp = new MvcApp();
 
@@ -183,6 +183,22 @@ namespace routing {
 
         });
         return mvcApp;
+    }
+
+    function getControllersFiles(dir:string, filelist:string[] = []) : string[] {
+        let files: string[]  = fs.readdirSync(dir);
+        
+        files.forEach(function(file) {
+            let subpath = dir + '/' + file;
+            if (fs.statSync(subpath).isDirectory()) {
+                filelist = getControllersFiles(subpath, filelist);
+            }
+            else {
+                filelist.push(file);
+            }
+        });
+        
+        return filelist;
     }
 
 }

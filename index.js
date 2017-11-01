@@ -353,7 +353,8 @@ var routing;
     function setup(app, options) {
         if (options === void 0) { options = {}; }
         var controllerDir = options.controllerDir || path.join(process.cwd(), 'controllers');
-        var files = fs.readdirSync(controllerDir);
+        var files = getControllersFiles(controllerDir);
+        console.log('files ', files);
         var dependencyManager = options.dependencyManager || dm;
         var mvcApp = new MvcApp();
         mvcApp.rootRouter = options.singleRouterToApp ? express.Router() : app;
@@ -408,6 +409,20 @@ var routing;
             app.use('/' + route, router);
         });
         return mvcApp;
+    }
+    function getControllersFiles(dir, filelist) {
+        if (filelist === void 0) { filelist = []; }
+        var files = fs.readdirSync(dir);
+        files.forEach(function (file) {
+            var subpath = dir + '/' + file;
+            if (fs.statSync(subpath).isDirectory()) {
+                filelist = getControllersFiles(subpath, filelist);
+            }
+            else {
+                filelist.push(file);
+            }
+        });
+        return filelist;
     }
 })(routing || (routing = {}));
 function setup(app, options) {
