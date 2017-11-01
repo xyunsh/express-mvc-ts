@@ -125,6 +125,9 @@ namespace routing {
     export function setup(app: express.Express, options: SetupOptions = {}): MvcApp {
         let controllerDir : string = options.controllerDir || path.join(process.cwd(), 'controllers');
         let files : string[] = fs.readdirSync(controllerDir);
+
+        console.log('files ', files);
+        
         let dependencyManager = options.dependencyManager || dm;
         let mvcApp = new MvcApp();
 
