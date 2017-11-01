@@ -138,7 +138,7 @@ namespace routing {
 
         mvcApp.rootRouter = options.singleRouterToApp ? express.Router() : app;
         mvcApp.controllers = files.filter(({name,filepath}) => controllerFileMatcher.test(name)).map(({name,filepath}) => {
-            let module = require(path.join(controllerDir, filepath));
+            let module = require(filepath);
             let controllerClass: ConstructorFor<IController> = module[name.replace(/.[j|t]s/, '')];
             let route: string = Reflect.getMetadata(MetadataSymbols.ControllerRoutePrefixSymbol, controllerClass);
             if (route === undefined) {

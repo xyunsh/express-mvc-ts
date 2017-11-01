@@ -363,7 +363,7 @@ var routing;
             return controllerFileMatcher.test(name);
         }).map(function (_a) {
             var name = _a.name, filepath = _a.filepath;
-            var module = require(path.join(controllerDir, filepath));
+            var module = require(filepath);
             var controllerClass = module[name.replace(/.[j|t]s/, '')];
             var route = Reflect.getMetadata(exports.MetadataSymbols.ControllerRoutePrefixSymbol, controllerClass);
             if (route === undefined) {
