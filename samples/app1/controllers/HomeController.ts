@@ -26,4 +26,9 @@ export class HomeController extends Controller {
         return this.view('about');
     }
 
+    @HttpGet 
+    public api(){
+        return this.json({a:1});
+    }
+
 }

@@ -13,7 +13,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mvc.setup(app);
+mvc.setup(app,{
+    debugRoutes:true
+});
 
 const port = 3000;
 app.listen(port, () => {
