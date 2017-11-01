@@ -196,6 +196,7 @@ var Controller = (function () {
         }
         else if (arg1 !== undefined) {
             viewName = arg1;
+            modelData = arg2;
         }
         return Promise.resolve({ type: 'view', name: getControllerName(this.constructor) + '/' + viewName, data: modelData });
     };

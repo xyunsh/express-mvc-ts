@@ -26,6 +26,7 @@ export class Controller implements IController {
 
         } else if (arg1 !== undefined) {
             viewName = arg1;
+            modelData = arg2;
         }
         return Promise.resolve<ViewResult>({ type: 'view', name: getControllerName((this as Object).constructor) + '/' + viewName, data: modelData });
     }
