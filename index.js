@@ -349,7 +349,7 @@ var routing;
             });
         });
     }
-    var controllerFileMatcher = /([A-Za-z0-9]+)Controller\.js$/;
+    var controllerFileMatcher = /([A-Za-z0-9]+)Controller\.[j|t]s$/;
     function setup(app, options) {
         if (options === void 0) { options = {}; }
         var controllerDir = options.controllerDir || path.join(process.cwd(), 'controllers');
@@ -360,7 +360,7 @@ var routing;
         mvcApp.rootRouter = options.singleRouterToApp ? express.Router() : app;
         mvcApp.controllers = files.filter(function (file) { return controllerFileMatcher.test(file); }).map(function (file) {
             var module = require(path.join(controllerDir, file));
-            var controllerClass = module[file.replace(/.js/, '')];
+            var controllerClass = module[file.replace(/.[j|t]s/, '')];
             var route = Reflect.getMetadata(exports.MetadataSymbols.ControllerRoutePrefixSymbol, controllerClass);
             if (route === undefined) {
                 route = getControllerName(controllerClass);
