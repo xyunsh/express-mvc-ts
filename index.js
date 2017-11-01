@@ -358,9 +358,13 @@ var routing;
         var dependencyManager = options.dependencyManager || dm;
         var mvcApp = new MvcApp();
         mvcApp.rootRouter = options.singleRouterToApp ? express.Router() : app;
-        mvcApp.controllers = files.filter(function (file) { return controllerFileMatcher.test(file); }).map(function (file) {
-            var module = require(path.join(controllerDir, file));
-            var controllerClass = module[file.replace(/.[j|t]s/, '')];
+        mvcApp.controllers = files.filter(function (_a) {
+            var name = _a.name, filepath = _a.filepath;
+            return controllerFileMatcher.test(name);
+        }).map(function (_a) {
+            var name = _a.name, filepath = _a.filepath;
+            var module = require(path.join(controllerDir, filepath));
+            var controllerClass = module[name.replace(/.[j|t]s/, '')];
             var route = Reflect.getMetadata(exports.MetadataSymbols.ControllerRoutePrefixSymbol, controllerClass);
             if (route === undefined) {
                 route = getControllerName(controllerClass);
@@ -377,7 +381,7 @@ var routing;
                 setRoutesSingleton(controllerClass, router, dependencyManager, options.debugRoutes || false);
             }
             mvcApp.rootRouter.use('/' + route, router);
-            return { name: controllerFileMatcher.exec(file)[1], type: controllerClass, instance: controllerInstance };
+            return { name: controllerFileMatcher.exec(name)[1], type: controllerClass, instance: controllerInstance };
         });
         return mvcApp;
     }
@@ -419,7 +423,10 @@ var routing;
                 filelist = getControllersFiles(subpath, filelist);
             }
             else {
-                filelist.push(file);
+                filelist.push({
+                    name: file,
+                    filepath: subpath
+                });
             }
         });
         return filelist;

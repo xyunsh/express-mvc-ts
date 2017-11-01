@@ -22,6 +22,11 @@ export class Request { constructor() { } }
 export interface Response extends express.Response { }
 export class Response { constructor() { } }
 
+interface ControllerFileInfo {
+    name: string;
+    filepath: string;
+}
+
 namespace routing {
 
     type ParamFunction = (req: express.Request, res: express.Response, dm: DependencyManager) => string[];
@@ -124,7 +129,7 @@ namespace routing {
 
     export function setup(app: express.Express, options: SetupOptions = {}): MvcApp {
         let controllerDir : string = options.controllerDir || path.join(process.cwd(), 'controllers');
-        let files : string[] =  getControllersFiles(controllerDir);
+        let files : ControllerFileInfo[] =  getControllersFiles(controllerDir);
 
         console.log('files ', files);
 
@@ -132,9 +137,9 @@ namespace routing {
         let mvcApp = new MvcApp();
 
         mvcApp.rootRouter = options.singleRouterToApp ? express.Router() : app;
-        mvcApp.controllers = files.filter(file => controllerFileMatcher.test(file)).map(file => {
-            let module = require(path.join(controllerDir, file));
-            let controllerClass: ConstructorFor<IController> = module[file.replace(/.[j|t]s/, '')];
+        mvcApp.controllers = files.filter(({name,filepath}) => controllerFileMatcher.test(name)).map(({name,filepath}) => {
+            let module = require(path.join(controllerDir, filepath));
+            let controllerClass: ConstructorFor<IController> = module[name.replace(/.[j|t]s/, '')];
             let route: string = Reflect.getMetadata(MetadataSymbols.ControllerRoutePrefixSymbol, controllerClass);
             if (route === undefined) {
                 route = getControllerName(controllerClass);
@@ -150,7 +155,7 @@ namespace routing {
                 setRoutesSingleton(controllerClass, router, dependencyManager, options.debugRoutes || false);
             }
             mvcApp.rootRouter.use('/' + route, router);
-            return { name: controllerFileMatcher.exec(file)![1], type: controllerClass, instance: controllerInstance };
+            return { name: controllerFileMatcher.exec(name)![1], type: controllerClass, instance: controllerInstance };
         });
 
         return mvcApp;
@@ -185,16 +190,19 @@ namespace routing {
         return mvcApp;
     }
 
-    function getControllersFiles(dir:string, filelist:string[] = []) : string[] {
+    function getControllersFiles(dir:string, filelist:ControllerFileInfo[] = []) : ControllerFileInfo[] {
         let files: string[]  = fs.readdirSync(dir);
         
-        files.forEach(function(file) {
+        files.forEach((file: string) => {
             let subpath = dir + '/' + file;
             if (fs.statSync(subpath).isDirectory()) {
                 filelist = getControllersFiles(subpath, filelist);
             }
             else {
-                filelist.push(file);
+                filelist.push({
+                    name:file,
+                    filepath:subpath
+                });
             }
         });
         
