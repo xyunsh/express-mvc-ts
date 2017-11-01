@@ -123,10 +123,11 @@ namespace routing {
     const controllerFileMatcher = /([A-Za-z0-9]+)Controller\.js$/;
 
     export function setup(app: express.Express, options: SetupOptions = {}): MvcApp {
-        let controllerDir = options.controllerDir || path.join(process.cwd(), 'controllers');
-        let files = fs.readdirSync(controllerDir);
+        let controllerDir : string = options.controllerDir || path.join(process.cwd(), 'controllers');
+        let files : string[] = fs.readdirSync(controllerDir);
         let dependencyManager = options.dependencyManager || dm;
         let mvcApp = new MvcApp();
+
         mvcApp.rootRouter = options.singleRouterToApp ? express.Router() : app;
         mvcApp.controllers = files.filter(file => controllerFileMatcher.test(file)).map(file => {
             let module = require(path.join(controllerDir, file));
@@ -146,11 +147,12 @@ namespace routing {
                 setRoutesSingleton(controllerClass, router, dependencyManager, options.debugRoutes || false);
             }
             mvcApp.rootRouter.use('/' + route, router);
-            return { name: controllerFileMatcher.exec(file) ![1], type: controllerClass, instance: controllerInstance };
+            return { name: controllerFileMatcher.exec(file)![1], type: controllerClass, instance: controllerInstance };
         });
 
         return mvcApp;
     }
+    
     //not developed yet
     function setupLazy(app: express.Express, options: SetupOptions = {}): MvcApp {
         let controllerDir = options.controllerDir || path.join(process.cwd(), 'controllers');
