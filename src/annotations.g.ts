@@ -15,6 +15,8 @@ export interface RouteMetadata {
 }
 
 function addRouteMetadata(target: Object, name: string, method: string, route: string, handler: Function) {
+    console.log('addRouteMetadata', target, name, method, route, handler );
+
     let existingData: RouteMetadata[] = Reflect.getMetadata(MetadataSymbols.ControllerRoutesSymbol, target);
     if (existingData === undefined) {
         existingData = [];
@@ -131,6 +133,7 @@ export interface RouteParameterMetadata {
 }
 
 function addParameterMetadata(target: Object, propertyKey: string, parameterIndex: number, kind: string, paramName?: string) {
+    console.log('addParameterMetadata', target, propertyKey, parameterIndex, kind, paramName );
     let metadata: RouteParameterMetadata[] = Reflect.getMetadata(MetadataSymbols.ControllerRouteParamsSymbol, target, propertyKey) || [];
     let params: any[] = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
     metadata.push({ index: parameterIndex, kind, type: params[parameterIndex], name: paramName });
