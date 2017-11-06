@@ -136,6 +136,7 @@ function addParameterMetadata(target: Object, propertyKey: string, parameterInde
     console.log('addParameterMetadata', 'target:', target, typeof(target), 'propertyKey:', propertyKey, 'parameterIndex:', parameterIndex, 'kind:', kind, 'paramName:', paramName );
     let metadata: RouteParameterMetadata[] = Reflect.getMetadata(MetadataSymbols.ControllerRouteParamsSymbol, target, propertyKey) || [];
     let params: any[] = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
+    console.log('design:paramtypes', params);
     metadata.push({ index: parameterIndex, kind, type: params[parameterIndex], name: paramName });
     Reflect.defineMetadata(MetadataSymbols.ControllerRouteParamsSymbol, metadata, target, propertyKey);
 }

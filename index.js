@@ -91,6 +91,7 @@ function addParameterMetadata(target, propertyKey, parameterIndex, kind, paramNa
     console.log('addParameterMetadata', 'target:', target, typeof (target), 'propertyKey:', propertyKey, 'parameterIndex:', parameterIndex, 'kind:', kind, 'paramName:', paramName);
     var metadata = Reflect.getMetadata(exports.MetadataSymbols.ControllerRouteParamsSymbol, target, propertyKey) || [];
     var params = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
+    console.log('design:paramtypes', params);
     metadata.push({ index: parameterIndex, kind: kind, type: params[parameterIndex], name: paramName });
     Reflect.defineMetadata(exports.MetadataSymbols.ControllerRouteParamsSymbol, metadata, target, propertyKey);
 }
