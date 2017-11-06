@@ -14,7 +14,7 @@ var path = require('path');
     MetadataSymbols.DependencyServiceTypeSymbol = Symbol.for("mvc:serviceType");
 })(exports.MetadataSymbols || (exports.MetadataSymbols = {}));
 function addRouteMetadata(target, name, method, route, handler) {
-    console.log('addRouteMetadata', target, name, method, route, handler);
+    console.log('addRouteMetadata', 'target', target, typeof (target), 'name', name, 'method', method, 'route', route, 'handler', handler);
     var existingData = Reflect.getMetadata(exports.MetadataSymbols.ControllerRoutesSymbol, target);
     if (existingData === undefined) {
         existingData = [];
@@ -88,7 +88,7 @@ function Route(route, p1, p2) {
     };
 }
 function addParameterMetadata(target, propertyKey, parameterIndex, kind, paramName) {
-    console.log('addParameterMetadata', target, propertyKey, parameterIndex, kind, paramName);
+    console.log('addParameterMetadata', 'target:', target, typeof (target), 'propertyKey:', propertyKey, 'parameterIndex:', parameterIndex, 'kind:', kind, 'paramName:', paramName);
     var metadata = Reflect.getMetadata(exports.MetadataSymbols.ControllerRouteParamsSymbol, target, propertyKey) || [];
     var params = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
     metadata.push({ index: parameterIndex, kind: kind, type: params[parameterIndex], name: paramName });
