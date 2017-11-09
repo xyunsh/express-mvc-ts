@@ -82,7 +82,7 @@ namespace routing {
                 return `req.params['${paramNames[i]}'] !== undefined ? ${prefix}req.params['${paramNames[i]}'] : ${prefix}req.query['${paramNames[i]}']`;
             });
 
-            console.log('args===>', args);
+            console.log('  |-- args', args);
 
             return new Function('req', 'res', 'dm', `return [${args.join(', ')}]`) as any;
         }

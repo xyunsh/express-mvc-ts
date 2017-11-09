@@ -308,7 +308,7 @@ var routing;
                 }
                 return "req.params['" + paramNames_1[i] + "'] !== undefined ? " + prefix + "req.params['" + paramNames_1[i] + "'] : " + prefix + "req.query['" + paramNames_1[i] + "']";
             });
-            console.log('args===>', args);
+            console.log('  |-- args', args);
             return new Function('req', 'res', 'dm', "return [" + args.join(', ') + "]");
         }
         return null;
