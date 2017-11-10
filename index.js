@@ -18,7 +18,18 @@ function addRouteMetadata(target, name, method, route, handler) {
     if (existingData === undefined) {
         existingData = [];
     }
-    existingData.push({ method: method, name: name, route: route === 'index' ? '' : route, handler: handler });
+    var meta = { method: method, name: name, route: route === 'index' ? '' : route, handler: handler };
+    var exists = false;
+    for (var i = 0; i < existingData.length; i++) {
+        if (existingData[i].route === meta.route) {
+            existingData[i].handler = handler;
+            exists = true;
+            break;
+        }
+    }
+    if (!exists) {
+        existingData.push(meta);
+    }
     Reflect.defineMetadata(exports.MetadataSymbols.ControllerRoutesSymbol, existingData, target);
 }
 function HttpGet(route, p1, p2) {

@@ -21,7 +21,22 @@ function addRouteMetadata(target: Object, name: string, method: string, route: s
     if (existingData === undefined) {
         existingData = [];
     }
-    existingData.push({ method, name, route: route === 'index' ? '' : route, handler });
+
+    const meta = { method, name, route: route === 'index' ? '' : route, handler };
+    let exists = false;
+
+    for(let i =0; i < existingData.length; i++){
+        if(existingData[i].route === meta.route){
+            existingData[i].handler = handler;
+            exists = true;
+            break;
+        }
+    }
+
+    if(!exists){
+        existingData.push(meta);
+    }
+    
     Reflect.defineMetadata(MetadataSymbols.ControllerRoutesSymbol, existingData, target);
 }
 
