@@ -100,7 +100,7 @@ namespace routing {
             let method: Function = (router as any)[route.method];
             let paramFunc: Function | null = createParamFunction(route, controllerClass);
             if (debug) {
-                console.log(`  |- ${route.method} /${route.route}`);
+                console.log(`  |- ${route.method} /${route.route}`, controllerClass);
             }
             method.call(router, '/' + route.route, (req: express.Request, res: express.Response) => {
                 var resultPromise = paramFunc ? route.handler.apply(controller, paramFunc(req, res, dm)) : route.handler.call(controller);

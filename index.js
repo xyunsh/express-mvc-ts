@@ -324,7 +324,7 @@ var routing;
             var method = router[route.method];
             var paramFunc = createParamFunction(route, controllerClass);
             if (debug) {
-                console.log("  |- " + route.method + " /" + route.route);
+                console.log("  |- " + route.method + " /" + route.route, controllerClass);
             }
             method.call(router, '/' + route.route, function (req, res) {
                 var resultPromise = paramFunc ? route.handler.apply(controller, paramFunc(req, res, dm$$1)) : route.handler.call(controller);
