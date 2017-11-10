@@ -26,7 +26,7 @@ function addRouteMetadata(target: Object, name: string, method: string, route: s
     let exists = false;
 
     for(let i =0; i < existingData.length; i++){
-        if(existingData[i].route === meta.route){
+        if(existingData[i].route === meta.route && existingData[i].method === method){
             existingData[i].handler = handler;
             exists = true;
             break;
@@ -36,7 +36,7 @@ function addRouteMetadata(target: Object, name: string, method: string, route: s
     if(!exists){
         existingData.push(meta);
     }
-    
+
     Reflect.defineMetadata(MetadataSymbols.ControllerRoutesSymbol, existingData, target);
 }
 

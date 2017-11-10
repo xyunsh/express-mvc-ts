@@ -21,7 +21,7 @@ function addRouteMetadata(target, name, method, route, handler) {
     var meta = { method: method, name: name, route: route === 'index' ? '' : route, handler: handler };
     var exists = false;
     for (var i = 0; i < existingData.length; i++) {
-        if (existingData[i].route === meta.route) {
+        if (existingData[i].route === meta.route && existingData[i].method === method) {
             existingData[i].handler = handler;
             exists = true;
             break;
