@@ -314,8 +314,7 @@ var routing;
         return null;
     }
     function setRoutesSingleton(controllerClass, router, dm$$1, debug) {
-        var controller;
-        controller = dm$$1.getInstance(controllerClass);
+        var controller = dm$$1.getInstance(controllerClass);
         var routes = Reflect.getMetadata(exports.MetadataSymbols.ControllerRoutesSymbol, controllerClass);
         if (!routes) {
             return controller;
@@ -324,7 +323,7 @@ var routing;
             var method = router[route.method];
             var paramFunc = createParamFunction(route, controllerClass);
             if (debug) {
-                console.log("  |- " + route.method + " /" + route.route, controllerClass);
+                console.log("  |- " + route.method + " /" + route.route, controllerClass, route);
             }
             method.call(router, '/' + route.route, function (req, res) {
                 var resultPromise = paramFunc ? route.handler.apply(controller, paramFunc(req, res, dm$$1)) : route.handler.call(controller);

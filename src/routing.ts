@@ -45,9 +45,11 @@ namespace routing {
         let paramTypes: any[] = Reflect.getMetadata("design:paramtypes", controllerClass.prototype, route.name);
         let paramAnnotations: RouteParameterMetadata[] = [];
         let params: RouteParameterMetadata[] = Reflect.getMetadata(MetadataSymbols.ControllerRouteParamsSymbol, controllerClass.prototype, route.name);
+
         if (params) {
             params.forEach(p => paramAnnotations[p.index] = p);
         }
+
         if (paramTypes && paramTypes.length) {
             let paramNames = getParamNames(route.handler);
             let args: string[] = paramTypes.map((p, i) => {
@@ -76,9 +78,11 @@ namespace routing {
                             return 'null'
                     }
                 }
+
                 if (typeof p === 'function' && [Number, String, Boolean, Array].indexOf(p) < 0) {
                     return `dm.getInstance(${p.name})`;
                 }
+
                 return `req.params['${paramNames[i]}'] !== undefined ? ${prefix}req.params['${paramNames[i]}'] : ${prefix}req.query['${paramNames[i]}']`;
             });
 
@@ -90,17 +94,19 @@ namespace routing {
     }
 
     function setRoutesSingleton<T>(controllerClass: ConstructorFor<T>, router: express.Router, dm: DependencyManager, debug: boolean): T {
-        let controller: T;
-        controller = dm.getInstance(controllerClass);
+        let controller: T = dm.getInstance(controllerClass);
+        
         let routes: RouteMetadata[] = Reflect.getMetadata(MetadataSymbols.ControllerRoutesSymbol, controllerClass);
+        
         if (!routes) {
             return controller;
         }
+
         routes.forEach(route => {
             let method: Function = (router as any)[route.method];
             let paramFunc: Function | null = createParamFunction(route, controllerClass);
             if (debug) {
-                console.log(`  |- ${route.method} /${route.route}`, controllerClass);
+                console.log(`  |- ${route.method} /${route.route}`, controllerClass, route);
             }
             method.call(router, '/' + route.route, (req: express.Request, res: express.Response) => {
                 var resultPromise = paramFunc ? route.handler.apply(controller, paramFunc(req, res, dm)) : route.handler.call(controller);
