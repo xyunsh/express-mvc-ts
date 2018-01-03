@@ -34,7 +34,8 @@ function addRouteMetadata(target: Object, name: string, method: string, route: s
     }
 
     if(!exists){
-        existingData.push(meta);
+        //existingData.push(meta);
+        existingData = [...existingData, meta];
     }
 
     Reflect.defineMetadata(MetadataSymbols.ControllerRoutesSymbol, existingData, target);

@@ -28,7 +28,7 @@ function addRouteMetadata(target, name, method, route, handler) {
         }
     }
     if (!exists) {
-        existingData.push(meta);
+        existingData = existingData.concat([meta]);
     }
     Reflect.defineMetadata(exports.MetadataSymbols.ControllerRoutesSymbol, existingData, target);
 }
